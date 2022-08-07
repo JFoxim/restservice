@@ -22,7 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import ru.rinat.restservice.dto.CompanyDto;
+import ru.rinat.restservice.dto.UserDto;
 import ru.rinat.restservice.entity.Company;
 import ru.rinat.restservice.service.CompanyService;
 
@@ -43,6 +50,9 @@ public class CompanyController {
 	}
 	
 	@GetMapping
+	@Tag(name = "Список компаний", description = "Позволяет получить список компаний")
+	@ApiResponses(value = { @ApiResponse(content = { @Content(mediaType = "application/json",
+	 array = @ArraySchema(schema = @Schema(implementation = CompanyDto.class)))})})
 	public List<CompanyDto> getCompanies() {
 		logger.info("Get list companies...");
 		
@@ -51,6 +61,10 @@ public class CompanyController {
 	}
 
 	@PostMapping
+	@Tag(name = "Создать компанию", description = "Позволяет создать новую компанию")
+	@ApiResponses(value = { @ApiResponse(description = "Компания создана успешно", responseCode = "200", 
+	 content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))), 
+	@ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
 	public ResponseEntity<Object> create(@RequestBody Company company) {
 		logger.info(String.format("Create company with id %s", company.getId()));
 		
@@ -63,11 +77,21 @@ public class CompanyController {
 	}
 
 	@GetMapping("/{id}")
+	@Tag(name = "Найти компанию по идентификатору", description = "Позволяет найти компанию по идентификатору")
+	@ApiResponses(value = { @ApiResponse(description = "Компания найдена успешено", responseCode = "200", 
+	 content = @Content(mediaType = "application/json", schema = @Schema(implementation = CompanyDto.class))), 
+	@ApiResponse(responseCode = "404", description = "Компания не найдена", content = @Content),
+	@ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
 	public CompanyDto getById(@PathVariable UUID id) {
 		return convertToDto(companyService.findById(id));
 	}
 
 	@PutMapping("/{id}")
+	@Tag(name = "Изменить компанию", description = "Позволяет изменить поля компании")
+	@ApiResponses(value = { @ApiResponse(description = "Компания изменена успешно", responseCode = "200", 
+	 content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))), 
+	@ApiResponse(responseCode = "404", description = "Компания не найдена", content = @Content),
+	@ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
 	public String update(@RequestBody Company company, @PathVariable UUID id) {
 		logger.info(String.format("Update company with id %s", company.getId()));
 		
@@ -86,6 +110,11 @@ public class CompanyController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@Tag(name = "Удалить компанию", description = "Позволяет удалить компанию")
+	@ApiResponses(value = { @ApiResponse(description = "Компания удалена успешно", responseCode = "200", 
+	 content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))), 
+	@ApiResponse(responseCode = "404", description = "Компания не найдена", content = @Content),
+	@ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
 	public String delete(@RequestBody Company company, @PathVariable UUID id) {
 		logger.info(String.format("Delete company with id %s", company.getId()));
 		

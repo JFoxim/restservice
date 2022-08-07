@@ -23,6 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import ru.rinat.restservice.dto.UserDto;
 import ru.rinat.restservice.entity.User;
 import ru.rinat.restservice.service.UserService;
@@ -43,6 +49,9 @@ public class UserController {
 	}
 
 	@GetMapping
+	@Tag(name = "Список активных пользователей", description = "Позволяет получить список активных пользователей")
+	@ApiResponses(value = { @ApiResponse(content = { @Content(mediaType = "application/json",
+	 array = @ArraySchema(schema = @Schema(implementation = UserDto.class)))})})
 	public List<UserDto> getUsers() {
 		logger.info("Get list users...");
 		
@@ -51,6 +60,10 @@ public class UserController {
 	}
 
 	@PostMapping
+	@Tag(name = "Создание пользователя", description = "Позволяет создать нового пользователя")
+	@ApiResponses(value = { @ApiResponse(description = "Пользователь создан успешно", responseCode = "200", 
+	 content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))), 
+	@ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
 	public ResponseEntity<Object> create(@RequestBody User user) {
 		logger.info(String.format("Create user with id %s", user.getId()));
 		
@@ -63,11 +76,21 @@ public class UserController {
 	}
 
 	@GetMapping("/{id}")
+	@Tag(name = "Пользователь по индентификатору", description = "Возвращает пользователя по уникальному идентификатору")
+	@ApiResponses(value = { @ApiResponse(description = "Пользователь найден успешно", responseCode = "200", 
+	 content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))), 
+	@ApiResponse(responseCode = "404", description = "Пользователь не найден", content = @Content),
+	@ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
 	public UserDto getById(@PathVariable UUID id) {
 		return convertToDto(userService.findById(id));
 	}
 
 	@PutMapping("/{id}")
+	@Tag(name = "Изменение пользователя", description = "Позволяет отредактировать поля пользователя")
+	@ApiResponses(value = { @ApiResponse(description = "Пользователь изменён успешно", responseCode = "200", 
+	 content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))), 
+	@ApiResponse(responseCode = "404", description = "Пользователь не найден", content = @Content),
+	@ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
 	public String update(@RequestBody User user, @PathVariable UUID id) {
 		logger.info(String.format("Update user with id %s", user.getId()));
 		
@@ -86,6 +109,11 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@Tag(name = "Удаление пользователя", description = "Позволяет пометить пользователя как удалённого")
+	@ApiResponses(value = { @ApiResponse(description = "Пользователь удалён успешно", responseCode = "200", 
+	 content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))), 
+	@ApiResponse(responseCode = "404", description = "Пользователь не найден", content = @Content),
+	@ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
 	public String delete(@RequestBody User user, @PathVariable UUID id) {
 		logger.info(String.format("Delete user with id %s", user.getId()));
 		

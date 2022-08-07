@@ -15,7 +15,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import ru.rinat.restservice.dto.AddressDto;
+import ru.rinat.restservice.dto.CompanyDto;
 import ru.rinat.restservice.entity.Address;
 import ru.rinat.restservice.service.AddressService;
 
@@ -36,6 +43,9 @@ public class AddressController {
 	}
 	
 	@GetMapping
+	@Tag(name = "Список адресов", description = "Позволяет получить список адресов")
+	@ApiResponses(value = { @ApiResponse(content = { @Content(mediaType = "application/json",
+	 array = @ArraySchema(schema = @Schema(implementation = AddressDto.class)))})})
 	public List<AddressDto> getAddreses() {
 		logger.info("Get list address...");
 		
@@ -44,6 +54,10 @@ public class AddressController {
 	}
 
 	@PostMapping
+	@Tag(name = "Создать адрес", description = "Позволяет создать новый адрес")
+	@ApiResponses(value = { @ApiResponse(description = "Адрес создан успешно", responseCode = "200", 
+	 content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))), 
+	@ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
 	public ResponseEntity<Object> create(@RequestBody Address address) {
 		logger.info(String.format("Create address with id %s", address.getId()));
 		
@@ -56,11 +70,19 @@ public class AddressController {
 	}
 
 	@GetMapping("/{id}")
+	@Tag(name = "Найти адрес по идентификатору", description = "Позволяет найти адрес по идентификатору")
+	@ApiResponses(value = { @ApiResponse(description = "Адрес найден успешно", responseCode = "200", 
+	 content = @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDto.class))), 
+	@ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
 	public AddressDto getById(@PathVariable UUID id) {
 		return convertToDto(addressService.findById(id));
 	}
 
 	@PutMapping("/{id}")
+	@Tag(name = "Изменить адрес", description = "Позволяет изменить поля адреса")
+	@ApiResponses(value = { @ApiResponse(description = "Адрес изменён успешно", responseCode = "200", 
+	 content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))), 
+	@ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
 	public String update(@RequestBody Address address, @PathVariable UUID id) {
 		logger.info(String.format("Update address with id %s", address.getId()));
 		
@@ -79,6 +101,10 @@ public class AddressController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@Tag(name = "Удалить адрес", description = "Позволяет удалить адрес")
+	@ApiResponses(value = { @ApiResponse(description = "Адрес удалён успешно", responseCode = "200", 
+	 content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))), 
+	@ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
 	public String delete(@RequestBody Address address, @PathVariable UUID id) {
 		logger.info(String.format("Delete address with id %s", address.getId()));
 		
