@@ -8,18 +8,25 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.rinat.restservice.entity.Address;
 import ru.rinat.restservice.entity.Company;
 import ru.rinat.restservice.exception.AddressNotFoundException;
 import ru.rinat.restservice.exception.CompanyNotFoundExeption;
+import ru.rinat.restservice.repository.AddressRepository;
 import ru.rinat.restservice.service.AddressService;
 import ru.rinat.restservice.service.CompanyService;
+
+import java.util.UUID;
 
 @SpringBootTest
 class AddressServiceTests {
 	
 	@Autowired
 	private AddressService addressService;
+
+	@Autowired
+	private AddressRepository addressRepository;
 	
 	private Address preparedData() {
 		Address address;
@@ -35,6 +42,7 @@ class AddressServiceTests {
 
 	@Test
 	public void addressAddTest() {
+
 		Address newAddress = new Address("Саратов", "Ленина", "5", 3);
 		addressService.create(newAddress);
 		Address selectedAddress = addressService.findByCityStreetHouseFlat("Саратов", "Ленина", "5", 3).get();

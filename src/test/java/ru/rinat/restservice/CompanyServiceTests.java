@@ -25,9 +25,8 @@ class CompanyServiceTests {
 		if (!companyService.existsByName(newCompanyName)) {
 			Company newCompany = new Company(newCompanyName, "123456789");
 			company = companyService.create(newCompany);
-		} else {
+		} else
 			company = companyService.findByName(newCompanyName).get();
-		}
 		return company;
 	}
 
