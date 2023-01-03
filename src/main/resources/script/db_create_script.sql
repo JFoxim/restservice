@@ -28,7 +28,6 @@ CREATE TABLE if not exists users_scheme.subscription (
     CONSTRAINT pk_subscription PRIMARY KEY (ID)
 );
 
-
 -- drop table if exists users_scheme.news;
 CREATE TABLE if not exists users_scheme.news (
     ID UUID DEFAULT gen_random_uuid(),
@@ -38,7 +37,6 @@ CREATE TABLE if not exists users_scheme.news (
     dt_create timestamp,
     CONSTRAINT pk_news PRIMARY KEY (ID)
 );
-
 
 -- drop table if exists users_scheme.news_subscription;
 CREATE TABLE if not exists users_scheme.news_subscription (
