@@ -6,8 +6,9 @@ plugins {
 }
 
 group = 'ru.rinat'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 sourceCompatibility = '11'
+archivesBaseName = 'restservice'
 
 repositories {
 	mavenCentral()
