@@ -30,7 +30,7 @@ public class CompanyService {
 		
 		Optional<Company> companyOpt = companyRepository.findById(id);
 
-		if (!companyOpt.isPresent()) {
+		if (companyOpt.isEmpty()) {
 			throw new CompanyNotFoundExeption("id - " + id);
 		}
 		return companyOpt.get();
@@ -59,10 +59,8 @@ public class CompanyService {
 	
 	public boolean existsByName(String name) {
 		Optional<Company> companyOpt = companyRepository.findByName(name);
-		
-		if (!companyOpt.isPresent()) return false;
-		
-		return true;
+
+		return companyOpt.isPresent();
 	}
 	
 	private void checkExistCompany(Company company) {

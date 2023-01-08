@@ -1,5 +1,7 @@
 package ru.rinat.restservice.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
@@ -12,8 +14,9 @@ public class CompanyDto implements Serializable {
 	private UUID id;
 	private String name;
 	private String phone;
-	Set<AddressDto> addressies;
 
+	@JsonIgnore
+	private Set<AddressDto> addressies;
 
 	public UUID getId() {
 		return id;

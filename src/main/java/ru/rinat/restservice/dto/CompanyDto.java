@@ -1,5 +1,7 @@
 package ru.rinat.restservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
@@ -12,6 +14,8 @@ public class CompanyDto implements Serializable {
 	private UUID id;
 	private String name;
 	private String phone;
+
+	@JsonIgnore
 	Set<AddressDto> addressies;
 
 
@@ -63,11 +67,13 @@ public class CompanyDto implements Serializable {
 		this.name = name;
 		this.phone = phone;
 	}
-	
+
+	@JsonIgnore
 	public Set<AddressDto> getAddressies() {
 		return addressies;
 	}
 
+	@JsonIgnore
 	public void setAddressies(Set<AddressDto> addressies) {
 		this.addressies = addressies;
 	}

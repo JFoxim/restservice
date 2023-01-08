@@ -31,11 +31,11 @@ class AddressServiceTests {
 	private Address preparedData() {
 		Address address;
 
-		if (!addressService.existsByCityStreetHouseFlat("Москва", "Композиторская", "13", 2)) {
-			Address newAddress = new Address("Москва", "Композиторская", "13", 2);
+		if (!addressService.existsByCityStreetHouseFlat("Волгоград", "Композиторская", "13", 2)) {
+			Address newAddress = new Address("Волгоград", "Композиторская", "13", 2);
 			address = addressService.create(newAddress);
 		} else {
-			address = addressService.findByCityStreetHouseFlat("Москва", "Композиторская", "13", 2).get();
+			address = addressService.findByCityStreetHouseFlat("Волгоград", "Композиторская", "13", 2).get();
 		}
 		return address;
 	}

@@ -1,5 +1,7 @@
 package ru.rinat.restservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
@@ -13,7 +15,7 @@ public class AddressDto implements Serializable {
 	private String city;
 	private String street;
 	private String houseNumber;
-	private Integer flatNumber;	
+	private Integer flatNumber;
 	Set<CompanyDto> companies;
 	
 	public AddressDto() {}

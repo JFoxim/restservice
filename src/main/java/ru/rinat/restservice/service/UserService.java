@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ru.rinat.restservice.controller.UserController;
+import ru.rinat.restservice.dto.SubscribDto;
 import ru.rinat.restservice.entity.User;
 import ru.rinat.restservice.exception.UserNotFoundExeption;
 import ru.rinat.restservice.repository.UserRepository;
@@ -45,6 +46,12 @@ public class UserService {
 		}
 	}
 
+	private void checkExistUserById(UUID userId) {
+		if (!userRepository.existsById(userId)) {
+			throw new UserNotFoundExeption("id - " + userId);
+		}
+	}
+
 	public String delete(User user) {
 		checkExistUser(user);
 
@@ -64,7 +71,7 @@ public class UserService {
 	public User findById(UUID id) {
 		Optional<User> userOpt = userRepository.findById(id);
 
-		if (!userOpt.isPresent()) {
+		if (userOpt.isEmpty()) {
 			throw new UserNotFoundExeption("id - " + id);
 		}
 
@@ -81,10 +88,16 @@ public class UserService {
 
 	public boolean existsByLogin(String login) {
 		Optional<User> userOpt = userRepository.findByLogin(login);
-		
-		if (!userOpt.isPresent()) return false;
-		
-		return true;
+
+		return userOpt.isPresent();
 	}
 
+	public String addSubscrib(SubscribDto subscribDto){
+	    UUID ownerUserId = subscribDto.getOwnerUserId();
+		UUID subscribeUserId = subscribDto.getSubscribeUserId();
+		checkExistUserById(ownerUserId);
+		checkExistUserById(subscribeUserId);
+		userRepository.addSubscribe(ownerUserId, subscribeUserId);
+		return  String.format("Подписка добавлена для %s и %s", ownerUserId, subscribeUserId);
+	}
 }

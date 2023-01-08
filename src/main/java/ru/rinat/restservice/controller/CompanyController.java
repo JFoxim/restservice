@@ -29,7 +29,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import ru.rinat.restservice.dto.CompanyDto;
-import ru.rinat.restservice.dto.UserDto;
 import ru.rinat.restservice.entity.Company;
 import ru.rinat.restservice.service.CompanyService;
 
@@ -37,7 +36,7 @@ import ru.rinat.restservice.service.CompanyService;
 @RequestMapping("/companies")
 public class CompanyController {
 	
-	final static Logger logger = LoggerFactory.getLogger(UserController.class);
+	final static Logger logger = LoggerFactory.getLogger(CompanyController.class);
 	
 	@Autowired
 	private ModelMapper modelMapper;
@@ -125,7 +124,6 @@ public class CompanyController {
 
 
 	private CompanyDto convertToDto(Company company) {
-		CompanyDto companyDto = modelMapper.map(company, CompanyDto.class);
-		return companyDto;
+		return modelMapper.map(company, CompanyDto.class);
 	}
 }

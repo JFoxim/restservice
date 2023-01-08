@@ -8,13 +8,13 @@ import java.util.UUID;
 
 public class AddressDto implements Serializable {
 	private static final long serialVersionUID = 904146912865711857L;
-	
 	private UUID id;
 	private String city;
 	private String street;
 	private String houseNumber;
-	private Integer flatNumber;	
-	Set<CompanyDto> companies;
+	private Integer flatNumber;
+
+	private Set<CompanyDto> companies;
 	
 	public AddressDto() {}
 		

@@ -46,7 +46,7 @@ public class Address {
 	
 	@ManyToMany(mappedBy = "addressies")
 	Set<Company> companies;
-	
+
 	public Address() {}
 		
 	public Address(String city, String street, String houseNumber, Integer flatNumber) {

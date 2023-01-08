@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import ru.rinat.restservice.dict.Gender;
 import ru.rinat.restservice.entity.User;
 import ru.rinat.restservice.exception.UserNotFoundExeption;
 import ru.rinat.restservice.service.UserService;
@@ -27,7 +28,7 @@ class UserServiceTests {
 		User user;
 
 		if (!userService.existsByLogin("peter")) {
-			User newUser = new User("Пётр", "Петров", "peter");
+			User newUser = new User("Пётр", "Петров", "peter", Gender.MALE);
 			user = userService.create(newUser);
 		} else {
 			user = userService.findByLogin("peter").get();
@@ -37,9 +38,9 @@ class UserServiceTests {
 
 	@Test
 	public void userAddTest() {
-		User newUser = new User("Иван", "Иванов", "ivan");
+		User newUser = new User("ivan.ivanov", "Иван", "Иванов", Gender.MALE);
 		userService.create(newUser);
-		User selectedUser = userService.findByLogin("ivan").get();
+		User selectedUser = userService.findByLogin("ivan.ivanov").get();
 
 		assertEquals(newUser, selectedUser);
 		

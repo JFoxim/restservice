@@ -29,6 +29,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import ru.rinat.restservice.dto.SubscribDto;
 import ru.rinat.restservice.dto.UserDto;
 import ru.rinat.restservice.entity.User;
 import ru.rinat.restservice.service.UserService;
@@ -122,9 +123,19 @@ public class UserController {
 		return userService.delete(user);
 	}
 
+	@PostMapping("/addsubscribe")
+	@Tag(name = "Добавление подписки", description = "Позволяет добавить подписку")
+	@ApiResponses(value = { @ApiResponse(description = "Подписка добавлена успешно", responseCode = "200",
+			content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
+			@ApiResponse(responseCode = "404", description = "Пользователь не найден", content = @Content),
+			@ApiResponse(responseCode = "401", description = "Authentication Failure", content = @Content(schema = @Schema(hidden = true)))})
+	public String addSubscribe(@RequestBody SubscribDto subscribDto) {
+		logger.info(String.format("Add subscribe  %s", subscribDto));
+		return userService.addSubscrib(subscribDto);
+	}
+
 	private UserDto convertToDto(User user) {
-		UserDto userDto = modelMapper.map(user, UserDto.class);
-		return userDto;
+		return modelMapper.map(user, UserDto.class);
 	}
 
 }
